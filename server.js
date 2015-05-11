@@ -36,6 +36,14 @@ app.get("/home",function(req,res){
 	res.render('home', { layout: 'layout',page: req.url })
 })
 
+app.get("/map",function(req,res){
+	res.render('map', { layout: 'layout',page: req.url })
+})
+
+app.get("/", function(req,res){
+	res.redirect('/map')
+})
+
 io.sockets.on('connection', function (socket) {
 
 	
