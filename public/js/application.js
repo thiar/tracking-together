@@ -48,11 +48,13 @@ $(function() {
 				connects[data[i].id] = data[i];
 			}
 		}
+		//console.log(data)
 		
 	});
 	socket.on('connection:remove', function(data) {
+		console.log("remove " + data)
 		if ((data.id in connects) && data.id!=userId) {
-			//console.log(i)
+			//console.log("remove")
 			map.removeLayer(markers[data.id]);
 			delete connects[data.id];
 		}
@@ -60,7 +62,7 @@ $(function() {
 	});
 	socket.on('connection:updatelocation', function(data) {
 		if ((data.id in connects) && data.id!=userId) {
-			console.log(data.coords[0])
+			//console.log(data.coords[0])
 			markers[data.id].setLatLng([data.coords[0].lat,data.coords[0].lng])
 		}
 		
@@ -98,6 +100,7 @@ $(function() {
 
 			sentData = {
 				id: userId,
+				socketid:socket.id,
 				coords: [{
 					lat: lat,
 					lng: lng,
@@ -105,7 +108,7 @@ $(function() {
 				}]
 			};
 			
-
+			console.log(sentData)
 			socket.emit('send:location',sentData);
 			watch=true;
 			
@@ -121,6 +124,7 @@ $(function() {
 		    //circle.setRadius(radius)
 		    sentData = {
 				id: userId,
+				socketid:socket.id,
 				coords: [{
 					lat: lat,
 					lng: lng,
