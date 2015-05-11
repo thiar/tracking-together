@@ -37,8 +37,8 @@ io.sockets.on('connection', function (socket) {
 		console.log(user)
 	});
 	socket.on('connection:update', function (data) {
-		
-		//io.emit('connection:remove',data)
+		user[data.id] = data;
+		io.emit('connection:updatelocation',data)
 		console.log("update "+data.id)
 	});
 	socket.on('disconnect', function (data) {

@@ -26,7 +26,7 @@ $(function() {
 
 	var connects = {};
 	var markers = {};
-	var userMarker;
+	
 	var active = false;
 
 	socket.on('load:coords', function(data) {
@@ -51,12 +51,17 @@ $(function() {
 		
 	});
 	socket.on('connection:remove', function(data) {
-		
-		
 		if ((data.id in connects) && data.id!=userId) {
 			//console.log(i)
 			map.removeLayer(markers[data.id]);
 			delete connects[data.id];
+		}
+		
+	});
+	socket.on('connection:updatelocation', function(data) {
+		if ((data.id in connects) && data.id!=userId) {
+			console.log(data.coords[0])
+			markers[data.id].setLatLng([data.coords[0].lat,data.coords[0].lng])
 		}
 		
 	});
@@ -67,16 +72,18 @@ $(function() {
 	  timeout: 5000,
 	  maximumAge: 0
 	};
-
+	var userMarker;
 	function success(e) {
+		var lat = e.coords.latitude;
+		var lng = e.coords.longitude;
+		var acr = e.coords.accuracy;
+		
 		if(!watch)
 		{
-			var lat = e.coords.latitude;
-			var lng = e.coords.longitude;
-			var acr = e.coords.accuracy;
+			
 
 			// mark user's position
-			userMarker = L.marker([lat, lng], {
+			userMarker = new L.marker([lat, lng], {
 				icon: redIcon
 			});
 			
@@ -106,22 +113,23 @@ $(function() {
 		else
 		{
 	    	var radius = e.accuracy / 2;
-	    	
-		    //userMarker.setLatLng(e.latlng).update()
+	    	console.log(userMarker)
+		    userMarker.setLatLng([lat,lng])
 		    userMarker.closePopup()
-		    userMarker.bindPopup("You are within " + e.latlng + " meters from this point").openPopup()
+		    userMarker.bindPopup("You are within " + e.coords.latitude +" "+ e.coords.longitude  + " meters from this point").openPopup()
 		    //circleMarker.setLatLng(e.latlng)
 		    //circle.setRadius(radius)
 		    sentData = {
 				id: userId,
 				coords: [{
-					lat: e.latitude,
-					lng: e.longitude,
-					acr: e.accuracy
+					lat: lat,
+					lng: lng,
+					acr: acr
 				}]
 			};
 		    socket.emit('connection:update',sentData);
 		}
+		
 		window.onbeforeunload = function() {
 		    socket.emit('connection:close',sentData);
 		};
