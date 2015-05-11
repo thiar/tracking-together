@@ -1,26 +1,43 @@
-var http = require('http');
-var Static = require('node-static');
-var app = http.createServer(handler);
-var io = require('socket.io').listen(app);
-var port = 8001;
 
-var files = new Static.Server('./public');
+
+var port = 4444;
+
+var express = require('express');
+var app = express();
+var session = require('express-session');
+expressLayouts = require('express-ejs-layouts');
+var bodyParser = require("body-parser");
+var http = require('http').Server(app);
+var io = require('socket.io').listen(http);
+var mysql = require('mysql');
+var partial = require('express-partial');
+app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.urlencoded());
+app.use(partial())
+app.use(expressLayouts)
+app.set('view engine', 'ejs')
+app.set('layout', 'layout')
+
+// var files = new Static.Server('./public');
+
+// function handler (request, response) {
+// 	request.on('end', function() {
+// 		files.serve(request, response);
+// 	}).resume();
+// }
 var user={}
-function handler (request, response) {
-	request.on('end', function() {
-		files.serve(request, response);
-	}).resume();
-}
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true
+}))
 
-// delete to see more logs from sockets
-io.set('log level', 1);
+app.get("/home",function(req,res){
+	res.render('home', { layout: 'layout',page: req.url })
+})
 
 io.sockets.on('connection', function (socket) {
 
-	// socket.on('send:coords', function (data) {
-	// 	socket.broadcast.emit('load:coords', data);
-	// 	console.log(data)
-	// });
 	
 	socket.on('send:location',function(data){
 		//console.log(data)
@@ -73,6 +90,8 @@ io.sockets.on('connection', function (socket) {
 });
 
 // start app on specified port
-app.listen(port);
-console.log('Your server goes on localhost:' + port);
-
+// app.listen(port);
+// console.log('Your server goes on localhost:' + port);
+http.listen(port, function(){
+  console.log('listening on *:'+port);
+});
