@@ -69,11 +69,13 @@ $(function() {
 	});
 
 	var watch =false;
+	var updateLoc=true;
 	options = {
-	  enableHighAccuracy: true,
+	  enableHighAccuracy: false,
 	  timeout: 5000,
-	  maximumAge: 0
+	  maximumAge: 30000,
 	};
+
 	var userMarker;
 	function success(e) {
 		var lat = e.coords.latitude;
@@ -113,10 +115,10 @@ $(function() {
 			watch=true;
 			
 		}
-		else
+		else if(updateLoc)
 		{
 			
-
+			updateLoc=false
 	    	var radius = e.accuracy / 2;
 	    	var currlat=userMarker.getLatLng().lat
 		    var currlng=userMarker.getLatLng().lng
@@ -157,6 +159,7 @@ $(function() {
 				}]
 			};
 		    socket.emit('connection:update',sentData);
+		    updateLoc=true
 		}
 		
 		window.onbeforeunload = function() {
