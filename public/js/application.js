@@ -129,7 +129,6 @@ $(function() {
 	    	var sellng=(lng-currlng)/1000
 		    //console.log("current lat lng= " +currlat+" "+currlng+",new lat lng= "+ lat+" "+lng + "selisih lat lng =  "+(currlatlng.distanceTo(latlng)))
 			console.log(sellat+" "+sellng)
-			socket.emit("log",sellat+" "+sellng)
 			interval = window.setInterval(function() { 
 			  counter++;
 			  // just pretend you were doing a real calculation of
@@ -144,6 +143,7 @@ $(function() {
 			  }
 			}, 10);
 			userMarker.closePopup()
+			socket.emit("log","lat= "+lat+" lng= "+lng+" currlat= "+currlat+" currlng= "+currlng)
 		    // userMarker.bindPopup("You are within " +currlatlng.distanceTo(latlng)+ " meters from this point").openPopup()
 		    //circleMarker.setLatLng(e.latlng)
 		    //circle.setRadius(radius)
