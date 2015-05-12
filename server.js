@@ -46,7 +46,9 @@ app.get("/", function(req,res){
 
 io.sockets.on('connection', function (socket) {
 
-	
+	socket.on('log',function(data){
+		console.log(data)
+	})
 	socket.on('send:location',function(data){
 		//console.log(data)
 		if (!(data.id in user)) {

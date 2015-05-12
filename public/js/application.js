@@ -115,11 +115,36 @@ $(function() {
 		}
 		else
 		{
+			
+
 	    	var radius = e.accuracy / 2;
-	    	console.log(userMarker)
-		    userMarker.setLatLng([lat,lng])
-		    userMarker.closePopup()
-		    userMarker.bindPopup("You are within " + e.coords.latitude +" "+ e.coords.longitude  + " meters from this point").openPopup()
+	    	var currlat=userMarker.getLatLng().lat
+		    var currlng=userMarker.getLatLng().lng
+		    var currlatlng = L.latLng(currlat,currlng);
+	    	
+	    	var latlng = L.latLng(lat, lng);
+	    	
+		    var counter = 0;
+		    var sellat=(lat-currlat)/1000
+	    	var sellng=(lng-currlng)/1000
+		    //console.log("current lat lng= " +currlat+" "+currlng+",new lat lng= "+ lat+" "+lng + "selisih lat lng =  "+(currlatlng.distanceTo(latlng)))
+			console.log(sellat+" "+sellng)
+			socket.emit("log",sellat+" "+sellng)
+			interval = window.setInterval(function() { 
+			  counter++;
+			  // just pretend you were doing a real calculation of
+			  // new position along the complex path
+			  console.log("update")
+			  currlat+=sellat;
+			  currlng+=sellng;
+			  userMarker.setLatLng([currlat,currlng])
+
+			  if (counter >= 1000) {
+			    window.clearInterval(interval);   
+			  }
+			}, 10);
+			userMarker.closePopup()
+		    // userMarker.bindPopup("You are within " +currlatlng.distanceTo(latlng)+ " meters from this point").openPopup()
 		    //circleMarker.setLatLng(e.latlng)
 		    //circle.setRadius(radius)
 		    sentData = {
@@ -184,35 +209,9 @@ $(function() {
 		window.onbeforeunload = function() {
 		    socket.emit('connection:close',sentData);
 		};
-
-		var emit = $.now();
-		// send coords on when user is active
-		doc.on('mousemove', function() {
-			active = true;
-
-			sentData = {
-				id: userId,
-				active: active,
-				coords: [{
-					lat: lat,
-					lng: lng,
-					acr: acr
-				}]
-			};
-
-			if ($.now() - emit > 30) {
-				socket.emit('send:coords', sentData);
-				emit = $.now();
-			}
-		});
 	}
 
 	
-
-	doc.bind('mouseup mouseleave', function() {
-		active = false;
-	});
-
 	// showing markers for connections
 	function setMarker(data) {
 		for (var i = 0; i < data.coords.length; i++) {
@@ -242,13 +241,5 @@ $(function() {
 		});
 	}
 
-	// delete inactive users every 15 sec
-	// setInterval(function() {
-	// 	for (var ident in connects){
-	// 		if ($.now() - connects[ident].updated > 15000) {
-	// 			delete connects[ident];
-	// 			map.removeLayer(markers[ident]);
-	// 		}
-	// 	}
-	// }, 15000);
+	
 });
