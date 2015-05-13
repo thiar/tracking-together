@@ -3,7 +3,6 @@ $(function() {
 	var userId = Math.random().toString(16).substring(2,15);
 	
 	var socket = io();
-	
 	var map;
 
 	var info = $('#infobox');
@@ -61,18 +60,6 @@ $(function() {
 		}
 		
 	});
-	socket.on('connection:clear', function(data) {
-		console.log("clear " + data)
-		for(var i in data)
-		{
-			if ((data.id in connects) && data.id!=userId) {
-				//console.log("remove")
-				map.removeLayer(markers[data.id]);
-				delete connects[data.id];
-			}
-		}
-		
-	});
 	socket.on('connection:updatelocation', function(data) {
 		if ((data.id in connects) && data.id!=userId) {
 			//console.log(data.coords[0])
@@ -91,23 +78,25 @@ $(function() {
 
 	var userMarker;
 	function success(e) {
-		console.log(map.getZoom())
-		var lat = e.latlng.lat;
-		var lng = e.latlng.lng;
-		var acr = e.accuracy;
-		map.setView([lat, lng], map.getZoom());
+		var lat = e.coords.latitude;
+		var lng = e.coords.longitude;
+		var acr = e.coords.accuracy;
+		
 		if(!watch)
 		{
 			
 
 			// mark user's position
-			
-			
-			// load leaflet map
-
 			userMarker = new L.marker([lat, lng], {
 				icon: redIcon
 			});
+			
+			// load leaflet map
+			map = L.map('map');
+
+			L.tileLayer('https://{s}.tiles.mapbox.com/v3/examples.map-i87786ca/{z}/{x}/{y}.png', { maxZoom: 18, detectRetina: true}).addTo(map);
+			map.setView([-7.275862, 112.791744], 16);
+
 			userMarker.addTo(map);
 			userMarker.bindPopup('<p>You are there! Your ID is ' + userId + '</p>').openPopup();
 
@@ -152,8 +141,7 @@ $(function() {
 			  userMarker.setLatLng([currlat,currlng])
 
 			  if (counter >= 1000) {
-			    window.clearInterval(interval);
-			    updateLoc=true   
+			    window.clearInterval(interval);   
 			  }
 			}, 10);
 			userMarker.closePopup()
@@ -171,7 +159,7 @@ $(function() {
 				}]
 			};
 		    socket.emit('connection:update',sentData);
-		    
+		    updateLoc=true
 		}
 		
 		window.onbeforeunload = function() {
@@ -185,18 +173,46 @@ $(function() {
 	// check whether browser supports geolocation api
 	if (navigator.geolocation) {
 		//navigator.geolocation.getCurrentPosition(positionSuccess, positionError);
-		//navigator.geolocation.watchPosition(success, positionError, options);
-		map = L.map('map');
-
-		L.tileLayer('https://{s}.tiles.mapbox.com/v3/examples.map-i87786ca/{z}/{x}/{y}.png', { maxZoom: 19, detectRetina: true}).addTo(map);
-		map.setView([-3.7391139,114.7557847], 16);
-		map.locate({watch: true, setView: false,enableHighAccuracy:false, maximumAge:10000,timeout: 3000000, frequency: 1});
+		navigator.geolocation.watchPosition(success, positionError, options);
 	} else {
 		$('.map').text('Your browser is out of fashion, there\'s no geolocation!');
 	}
 	
-	map.on('locationerror', positionError);
-	map.on('locationfound', success);
+
+	function positionSuccess(position) {
+		var lat = position.coords.latitude;
+		var lng = position.coords.longitude;
+		var acr = position.coords.accuracy;
+
+		// mark user's position
+		userMarker = L.marker([lat, lng], {
+			icon: redIcon
+		});
+		
+		// load leaflet map
+		map = L.map('map');
+
+		L.tileLayer('https://{s}.tiles.mapbox.com/v3/examples.map-i87786ca/{z}/{x}/{y}.png', { maxZoom: 18, detectRetina: true}).addTo(map);
+		map.setView([-7.275862, 112.791744], 16);
+
+		userMarker.addTo(map);
+		userMarker.bindPopup('<p>You are there! Your ID is ' + userId + '</p>').openPopup();
+		
+		sentData = {
+			id: userId,
+			coords: [{
+				lat: lat,
+				lng: lng,
+				acr: acr
+			}]
+		};
+		
+
+		socket.emit('send:location',sentData);
+		window.onbeforeunload = function() {
+		    socket.emit('connection:close',sentData);
+		};
+	}
 
 	
 	// showing markers for connections
