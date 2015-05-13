@@ -88,11 +88,11 @@ io.sockets.on('connection', function (socket) {
 		
 	});
 
-	setInterval(function() {
-	    clearUser(user,io)
-	    for (var i = 0; i < 1; i++) {
-	    }
-	}, 10000)
+	// setInterval(function() {
+	//     clearUser(user,io)
+	//     for (var i = 0; i < 1; i++) {
+	//     }
+	// }, 10000)
 
 });
 
