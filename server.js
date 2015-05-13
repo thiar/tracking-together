@@ -40,18 +40,20 @@ app.get("/", function(req,res){
 
 io.sockets.on('connection', function (socket) {
 
+
 	socket.on('log',function(data){
 		//console.log(data)
 	})
 	socket.on('send:location',function(data){
 		//console.log(data)
 		if (!(data.id in user)) {
-			console.log(data)
+			//console.log(data)
+			//data.id=socket.handshake.address;
 			user[data.id] = data;
 		}
 		io.emit('load:coords', data);
 		socket.emit('connection:list',user);
-		console.log(user)
+		console.log(socket.handshake.address)
 	})
 	socket.on('connection:close', function (data) {
 		for(var i in user)
@@ -86,9 +88,21 @@ io.sockets.on('connection', function (socket) {
 		
 	});
 
+	setInterval(function() {
+	    clearUser(user,io)
+	    for (var i = 0; i < 1; i++) {
+	    }
+	}, 10000)
+
 });
 
 
+function clearUser(user,socket)
+{
+	socket.emit('connection:clear',user);
+	user ={}
+
+}
 http.listen(port, function(){
   console.log('listening on *:'+port);
 });
