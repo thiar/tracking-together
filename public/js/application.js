@@ -3,7 +3,7 @@ $(function() {
 	var userId = Math.random().toString(16).substring(2,15);
 	
 	var socket = io();
-	
+
 	var map;
 
 	var info = $('#infobox');
@@ -62,11 +62,11 @@ $(function() {
 		
 	});
 	socket.on('connection:clear', function(data) {
-		console.log("clear " + data)
+		
 		for(var i in data)
 		{
 			if ((data.id in connects) && data.id!=userId) {
-				//console.log("remove")
+				console.log("clear "+ data.id)
 				map.removeLayer(markers[data.id]);
 				delete connects[data.id];
 			}

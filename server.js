@@ -56,16 +56,21 @@ io.sockets.on('connection', function (socket) {
 		console.log(socket.handshake.address)
 	})
 	socket.on('connection:close', function (data) {
-		for(var i in user)
-		{
-			if(user[i].socketid==socket.id)
-			{
-				var dataR={}
-				dataR.id=user[i].id
-				delete user[i];
-				io.emit('connection:remove',dataR)
-			}
-		}
+		// for(var i in user)
+		// {
+		// 	if(user[i].socketid==socket.id)
+		// 	{
+		// 		var dataR={}
+		// 		dataR.id=user[i].id
+		// 		delete user[i];
+		// 		io.emit('connection:remove',dataR)
+		// 	}
+		// }
+		var dataR={}
+		dataR.id=user[data.id].id
+		delete user[data.id];
+		io.emit('connection:remove',dataR)
+
 	});
 	socket.on('connection:update', function (data) {
 		user[data.id] = data;
@@ -88,18 +93,18 @@ io.sockets.on('connection', function (socket) {
 		
 	});
 
-	// setInterval(function() {
-	//     clearUser(user,io)
-	//     for (var i = 0; i < 1; i++) {
-	//     }
-	// }, 10000)
+	setInterval(function() {
+	    clearUser(user,io)
+	    for (var i = 0; i < 1; i++) {
+	    }
+	}, 10000)
 
 });
 
 
 function clearUser(user,socket)
 {
-	socket.emit('connection:clear',user);
+	//socket.emit('connection:clear',user);
 	user ={}
 
 }
