@@ -83,6 +83,7 @@ $(function() {
 
 	var watch =false;
 	var updateLoc=true;
+	var track=false;
 	options = {
 	  enableHighAccuracy: false,
 	  timeout: 5000,
@@ -90,12 +91,13 @@ $(function() {
 	};
 
 	var userMarker;
+	var currPosition;
 	function success(e) {
 		console.log(map.getZoom())
 		var lat = e.latlng.lat;
 		var lng = e.latlng.lng;
 		var acr = e.accuracy;
-		
+		currPosition=e.latlng;
 		if(!watch)
 		{
 
@@ -114,7 +116,7 @@ $(function() {
 					acr: acr
 				}]
 			};
-			
+			map.setView([lat,lng],16);
 			console.log(sentData)
 			socket.emit('send:location',sentData);
 			watch=true;
@@ -147,7 +149,7 @@ $(function() {
 			  currlat+=sellat;
 			  currlng+=sellng;
 			  
-			  map.setView([currlat,currlng], map.getZoom());
+			  if(track)map.setView([currlat,currlng], map.getZoom());
 
 			  userMarker.setLatLng([currlat,currlng])
 
@@ -174,29 +176,52 @@ $(function() {
 		    
 		}
 		
-		window.onbeforeunload = function() {
-		    socket.emit('connection:close',sentData);
-		};
-		console.log(watch)
+		
+		
 		
 	}
+	window.onbeforeunload = function() {
+	    socket.emit('connection:close',sentData);
+	};
+	$('#track').click(function(){
+		if(track)track=false;
+		else{
+			map.setView(currPosition,18);
+			track=true;
+		} 
+		console.log(track)
+	});
 	
 	
 	// check whether browser supports geolocation api
 	if (navigator.geolocation) {
-		//navigator.geolocation.getCurrentPosition(positionSuccess, positionError);
-		//navigator.geolocation.watchPosition(success, positionError, options);
-		map = L.map('map');
-
-		L.tileLayer('https://{s}.tiles.mapbox.com/v3/examples.map-i87786ca/{z}/{x}/{y}.png', { maxZoom: 19, detectRetina: true}).addTo(map);
-		map.setView([-3.7391139,114.7557847], 16);
-		map.locate({watch: true, setView: false,enableHighAccuracy:true, maximumAge:1000,timeout: 3000000, frequency: 1});
+		navigator.geolocation.getCurrentPosition(positionSuccess, positionError);
+		
 	} else {
 		$('.map').text('Your browser is out of fashion, there\'s no geolocation!');
 	}
+	function positionSuccess(e){
 	
-	map.on('locationerror', positionError);
-	map.on('locationfound', success);
+		map = L.map('map',{
+			center: [e.coords.latitude,e.coords.longitude],
+    		zoom: 3,
+    		zoomControl:false
+    		
+    		
+		});
+		L.control.zoom({position:'bottomleft'}).addTo(map)
+
+		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+		 	maxZoom: 19,
+		 	minZoom:7, 
+		 	detectRetina: true,
+		 	attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+		}).addTo(map);
+		map.locate({watch: true, setView: false,enableHighAccuracy:true, maximumAge:1000,timeout: 3000000, frequency: 1});
+		map.on('locationerror', positionError);
+		map.on('locationfound', success);
+	}
+	
 
 	
 	// showing markers for connections

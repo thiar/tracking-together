@@ -87,7 +87,7 @@ io.sockets.on('connection', function (socket) {
 				dataR.id=user[i].id
 				delete user[i];
 				io.emit('connection:remove',dataR)
-				console.log("disconnect")
+				console.log(socket.handshake.address+" disconnect")
 			}
 		}
 		
