@@ -24,8 +24,8 @@ h1 {
     right: 1%;
 }
 
-.tool{
-	padding: 2px;
+#tool{
+	padding: 3px;
 }
 
 #map{
@@ -34,9 +34,19 @@ h1 {
 	margin: 0px;
 	height: 100%;
 }
+
+.bottomnav{
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	padding-bottom: 1%;
+	padding-right: 1%;
+}
+
 .leaflet-popup-content {
 	font: 12px 'Lato', Arial, sans-serif !important;
 }
+
 .leaflet-control-attribution.leaflet-control {
 	display: none;
 }
