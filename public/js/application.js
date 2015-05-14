@@ -34,7 +34,7 @@ $(function() {
 		if (!(data.id in connects) && data.id!=userId) {
 			setMarker(data);
 			//console.log(data)
-			connects[data[i].id] = data[i];
+			connects[data.id] = data;
 		}
 
 		connects[data.id] = data;
@@ -136,6 +136,7 @@ $(function() {
 
 	var userMarker;
 	var currPosition;
+	var circleMarker
 	function success(e) {
 		console.log(map.getZoom())
 		var lat = e.latlng.lat;
@@ -150,7 +151,7 @@ $(function() {
 			});
 			userMarker.addTo(map);
 			userMarker.bindPopup('<p>You are there! Your ID is ' + userId + '</p>').openPopup();
-
+			
 			sentData = {
 				id: userId,
 				socketid:socket.id,
@@ -196,7 +197,8 @@ $(function() {
 			  if(track)map.setView([currlat,currlng], map.getZoom());
 
 			  userMarker.setLatLng([currlat,currlng])
-
+			  // circleMarker.setLatLng(e.latlng)
+		   //    circle.setRadius(radius);
 			  if (counter >= distance) {
 			    window.clearInterval(interval);
 			    updateLoc=true   
@@ -228,14 +230,30 @@ $(function() {
 	    socket.emit('connection:close',sentData);
 	};
 	$('#track').click(function(){
-		if(track)track=false;
+		if(track)
+		{
+			track=false;
+			$('#tool').addClass("text-danger")
+			userMarker.setIcon(redIcon)
+		}
 		else{
 			map.setView(currPosition,18);
 			track=true;
+			$('#tool').removeClass("text-danger")
+			userMarker.setIcon(yellowIcon)
 		} 
 		console.log(track)
 	});
-	
+	$('#map').tap(function(){
+		track=false;
+		$('#tool').addClass("text-danger")
+		userMarker.setIcon(redIcon)
+	})
+	$('#map').touchmove(function(){
+		track=false;
+		$('#tool').addClass("text-danger")
+		userMarker.setIcon(redIcon)
+	})
 	
 	// check whether browser supports geolocation api
 	if (navigator.geolocation) {
