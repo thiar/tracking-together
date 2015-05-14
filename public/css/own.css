@@ -1,0 +1,42 @@
+html, body {
+	height: 100%;
+	width: 100%;
+	padding: 0px;
+	margin: 0px;
+}
+
+header {
+	width: 100%;
+	text-align: center;
+	line-height: 32px;
+}
+
+h1 {
+	font-size: 30px;
+	font-weight: 400;
+}
+
+.zindex {
+    z-index: +1;
+    position: absolute;
+    width: 100%;
+    top: 5%;
+    right: 1%;
+}
+
+.tool{
+	padding: 2px;
+}
+
+#map{
+	/*position: relative;*/
+	padding: 0px;
+	margin: 0px;
+	height: 100%;
+}
+.leaflet-popup-content {
+	font: 12px 'Lato', Arial, sans-serif !important;
+}
+.leaflet-control-attribution.leaflet-control {
+	display: none;
+}
