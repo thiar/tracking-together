@@ -229,6 +229,7 @@ $(function() {
 	window.onbeforeunload = function() {
 	    socket.emit('connection:close',sentData);
 	};
+	$("body").disableSelection();
 	$('#track').click(function(){
 		if(track)
 		{
