@@ -34,10 +34,10 @@ $(function() {
 		if (!(data.id in connects) && data.id!=userId) {
 			setMarker(data);
 			//console.log(data)
+			connects[data[i].id] = data[i];
 		}
 
 		connects[data.id] = data;
-		connects[data.id].updated = $.now();
 	});
 	socket.on('connection:list', function(data) {
 		
@@ -58,6 +58,7 @@ $(function() {
 			//console.log("remove")
 			map.removeLayer(markers[data.id]);
 			delete connects[data.id];
+			delete markers[data.id]
 		}
 		
 	});
@@ -69,6 +70,7 @@ $(function() {
 				console.log("clear "+ data.id)
 				map.removeLayer(markers[data.id]);
 				delete connects[data.id];
+				delete markers[data.id];
 			}
 		}
 		
@@ -76,7 +78,49 @@ $(function() {
 	socket.on('connection:updatelocation', function(data) {
 		if ((data.id in connects) && data.id!=userId) {
 			//console.log(data.coords[0])
-			markers[data.id].setLatLng([data.coords[0].lat,data.coords[0].lng])
+			var updateLoc=false
+			var lat=data.coords[0].lat
+			var lng=data.coords[0].lng
+	    	var currlat=markers[data.id].getLatLng().lat
+		    var currlng=markers[data.id].getLatLng().lng
+		    var currlatlng = L.latLng(currlat,currlng);
+	    	
+	    	var latlng = L.latLng(lat, lng);
+	    	
+		    var counter = 0;
+		    var distance=(Math.floor(latlng.distanceTo(userMarker.getLatLng()))+1)*10
+
+		    var sellat=(lat-currlat)/distance
+	    	var sellng=(lng-currlng)/distance
+			
+			
+			if(updateLoc){
+				intervalUpdate = window.setInterval(function() { 
+			  
+				  counter++;
+				  // just pretend you were doing a real calculation of
+				  // new position along the complex path
+				  console.log("update")
+				  currlat+=sellat;
+				  currlng+=sellng;
+
+				  userMarker.setLatLng([currlat,currlng])
+				  markers[data.id].setLatLng([currlat,currlng])
+				  if (counter >= distance) {
+				    window.clearInterval(intervalUpdate);
+				    updateLoc=true   
+				  }
+				}, 10);
+				
+			}
+			
+		}
+		else{
+			if (!(data.id in connects) && data.id!=userId) {
+				setMarker(data);
+				//console.log(data)
+			}
+			connects[data.id] = data;
 		}
 		
 	});
@@ -134,7 +178,7 @@ $(function() {
 	    	var latlng = L.latLng(lat, lng);
 	    	
 		    var counter = 0;
-		    var distance=Math.floor(e.latlng.distanceTo(userMarker.getLatLng()))+1
+		    var distance=(Math.floor(e.latlng.distanceTo(userMarker.getLatLng()))+1)*10
 
 		    var sellat=(lat-currlat)/distance
 	    	var sellng=(lng-currlng)/distance
