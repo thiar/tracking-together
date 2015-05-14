@@ -95,15 +95,9 @@ $(function() {
 		var lat = e.latlng.lat;
 		var lng = e.latlng.lng;
 		var acr = e.accuracy;
-		map.setView([lat, lng], map.getZoom());
+		
 		if(!watch)
 		{
-			
-
-			// mark user's position
-			
-			
-			// load leaflet map
 
 			userMarker = new L.marker([lat, lng], {
 				icon: redIcon
@@ -138,25 +132,31 @@ $(function() {
 	    	var latlng = L.latLng(lat, lng);
 	    	
 		    var counter = 0;
-		    var sellat=(lat-currlat)/1000
-	    	var sellng=(lng-currlng)/1000
+		    var distance=Math.floor(e.latlng.distanceTo(userMarker.getLatLng()))+1
+
+		    var sellat=(lat-currlat)/distance
+	    	var sellng=(lng-currlng)/distance
 		    //console.log("current lat lng= " +currlat+" "+currlng+",new lat lng= "+ lat+" "+lng + "selisih lat lng =  "+(currlatlng.distanceTo(latlng)))
 			console.log(sellat+" "+sellng)
 			interval = window.setInterval(function() { 
+			  
 			  counter++;
 			  // just pretend you were doing a real calculation of
 			  // new position along the complex path
 			  console.log("update")
 			  currlat+=sellat;
 			  currlng+=sellng;
+			  
+			  map.setView([currlat,currlng], map.getZoom());
+
 			  userMarker.setLatLng([currlat,currlng])
 
-			  if (counter >= 1000) {
+			  if (counter >= distance) {
 			    window.clearInterval(interval);
 			    updateLoc=true   
 			  }
 			}, 10);
-			userMarker.closePopup()
+			//userMarker.closePopup()
 			socket.emit("log","lat= "+lat+" lng= "+lng+" currlat= "+currlat+" currlng= "+currlng)
 		    // userMarker.bindPopup("You are within " +currlatlng.distanceTo(latlng)+ " meters from this point").openPopup()
 		    //circleMarker.setLatLng(e.latlng)
@@ -190,7 +190,7 @@ $(function() {
 
 		L.tileLayer('https://{s}.tiles.mapbox.com/v3/examples.map-i87786ca/{z}/{x}/{y}.png', { maxZoom: 19, detectRetina: true}).addTo(map);
 		map.setView([-3.7391139,114.7557847], 16);
-		map.locate({watch: true, setView: false,enableHighAccuracy:false, maximumAge:10000,timeout: 3000000, frequency: 1});
+		map.locate({watch: true, setView: false,enableHighAccuracy:true, maximumAge:1000,timeout: 3000000, frequency: 1});
 	} else {
 		$('.map').text('Your browser is out of fashion, there\'s no geolocation!');
 	}
