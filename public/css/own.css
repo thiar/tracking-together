@@ -35,15 +35,23 @@ h1 {
 	height: 100%;
 }
 
-.bottomnav{
+.right-nav{
 	position: fixed;
 	right: 0;
-	bottom: 0;
-	padding-bottom: 1%;
+	top: 0;
+	padding-top: 1%;
 	padding-right: 1%;
 }
 
-.iconpal{
+.bottom-nav{
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	padding-bottom: 2%;
+	padding-right: 1%;
+}
+
+.icon-pal{
 	position: fixed;
 	left: 0;
 	top: 0;
