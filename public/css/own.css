@@ -43,6 +43,14 @@ h1 {
 	padding-right: 1%;
 }
 
+.iconpal{
+	position: fixed;
+	left: 0;
+	top: 0;
+	padding-left: 1%;
+	padding-top: 1%;
+}
+
 .leaflet-popup-content {
 	font: 12px 'Lato', Arial, sans-serif !important;
 }

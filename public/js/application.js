@@ -234,13 +234,13 @@ $(function() {
 		if(track)
 		{
 			track=false;
-			$('#tool').addClass("text-danger")
+			$('#track-img').attr("src","./assets/find1.png")
 			userMarker.setIcon(redIcon)
 		}
 		else{
 			map.setView(currPosition,18);
 			track=true;
-			$('#tool').removeClass("text-danger")
+			$('#track-img').attr("src","./assets/find2.png")
 			userMarker.setIcon(yellowIcon)
 		} 
 		console.log(track)
