@@ -40,7 +40,7 @@ app.get("/", function(req,res){
 
 
 app.get("/test", function(req,res){
-	res.render('page', {layout: 'layouts',page: req.url})
+	res.render('page', {layout: 'layoutnew',page: req.url})
 })
 
 //app.get("/test", function(req,res){
