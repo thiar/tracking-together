@@ -1,6 +1,6 @@
 $(function() {
 	// generate unique user id
-	var userId = Math.random().toString(16).substring(2,15);
+	var userId = $('#username').text();
 	
 	var socket = io();
 
@@ -234,25 +234,30 @@ $(function() {
 		if(track)
 		{
 			track=false;
-			$('#track-img').attr("src","./assets/find1.png")
+			//$('#track-img').attr("src","./assets/find1.png")
+			$('#track-img').show()
+			$('#track-img2').hide()
 			userMarker.setIcon(redIcon)
 		}
 		else{
 			map.setView(currPosition,18);
 			track=true;
-			$('#track-img').attr("src","./assets/find2.png")
+			$('#track-img2').show()
+			$('#track-img').hide()
 			userMarker.setIcon(yellowIcon)
 		} 
 		console.log(track)
 	});
 	$('#map').tap(function(){
 		track=false;
-		$('#track-img').attr("src","./assets/find1.png")
+		$('#track-img').show()
+		$('#track-img2').hide()
 		userMarker.setIcon(redIcon)
 	})
 	$('#map').touchmove(function(){
 		track=false;
-		$('#track-img').attr("src","./assets/find1.png")
+		$('#track-img').show()
+		$('#track-img2').hide()
 		userMarker.setIcon(redIcon)
 	})
 	

@@ -35,7 +35,7 @@ app.get("/map",function(req,res){
 })
 
 app.get("/", function(req,res){
-	res.redirect('/map')
+	res.redirect('/login')
 })
 
 
@@ -121,6 +121,8 @@ function clearUser(user,socket)
 http.listen(port, function(){
   console.log('listening on *:'+port);
 });
+
+
 /*database connection*/
 mongoose.connect('mongodb://localhost/test');
 /*collection user shcema*/
@@ -162,6 +164,9 @@ app.post('/register',function(req,res){
         }
     }).limit(1);
 })
+app.get('/login',function(req,res){
+	res.render('login', {layout: 'layoutnew',page: req.url})
+})
 app.post('/login',function(req,res){
 	var username=req.body.username
 	var password=req.body.password
@@ -169,14 +174,29 @@ app.post('/login',function(req,res){
         if (err)
             console.log('error occured in the database');
         if(result.length=== 0){
-       		res.end("Login gagal")	
+       		var data ={
+        		status:"AUTH_FAILED"
+        	}
+       		res.render('login', {layout: 'layoutnew',page: req.url,data:data})
         }
         else {
+
         	var data ={
         		status:"success",
         		userData:result
         	}
-        	res.render('page', {layout: 'layoutnew',page: req.url,data:data})
+        	app.locals.data=data
+        	req.session.login=true
+        	req.session.data=data
+        	res.redirect('/page')
         }
     }).limit(1);
+})
+app.get('/page',function(req,res){
+	if(!req.session.login)res.redirect('/login');
+	else res.render('page', {layout: 'layoutnew',page: req.url,data:app.locals.data})
+})
+app.get('/logout',function(req,res){
+	req.session.destroy()
+	res.redirect('/login');
 })

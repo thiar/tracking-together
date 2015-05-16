@@ -1,12 +1,13 @@
 <div id="map"></div>
 <nav>
 <div class="bottom-nav">
-        	<a id="track"><img id="track-img" src="./assets/find1.png" alt="menu" height="42"></a>
+        	<a id="track"><img style="display:none;" id="track-img2" src="./assets/find2.png" alt="menu" height="42"><img id="track-img" src="./assets/find1.png" alt="menu" height="42"></a>
         </div>
 </nav>
 
 <div class="navbar navbar-inverse navbar-fixed-top">
 			<!-- start: TOP NAVIGATION CONTAINER -->
+
 			<div class="container">
 				<div class="navbar-tools">
 					<!-- start: TOP NAVIGATION MENU -->
@@ -332,7 +333,7 @@
 						<li class="dropdown current-user">
 							<a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#">
 								<img src="assets/avatar-default-small.png" class="circle-img" alt="">
-								<span class="username">Romen</span>
+								<span id="username" class="username"><%=data.userData[0].username%></span>
 								<i class="clip-chevron-down"></i>
 							</a>
 							<ul class="dropdown-menu">
@@ -359,7 +360,7 @@
 										&nbsp;Lock Screen </a>
 								</li>
 								<li>
-									<a href="login_example1.html">
+									<a href="/logout">
 										<i class="clip-exit"></i>
 										&nbsp;Log Out
 									</a>
