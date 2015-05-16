@@ -10,7 +10,8 @@
     "node": ">= 0.8.x"
   },
   "dependencies": {
-    "socket.io": "latest",
-    "node-static": "latest"
+    "mongoose": "^4.0.3",
+    "node-static": "latest",
+    "socket.io": "latest"
   }
 }
