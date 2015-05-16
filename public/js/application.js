@@ -297,7 +297,7 @@ $(function() {
 		for (var i = 0; i < data.coords.length; i++) {
 			var marker = L.marker([data.coords[i].lat, data.coords[i].lng], { icon: yellowIcon }).addTo(map);
 			
-			marker.bindPopup('<p>One more external user is here!</p>');
+			marker.bindPopup('<p>One more external user is '+ data.id+'</p>');
 			
 			markers[data.id] = marker;
 		}
