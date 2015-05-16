@@ -377,8 +377,10 @@ a.bricky:hover {
 	position: relative !important;
 }
 .navbar > .container .navbar-brand, .logo {
-	padding: 5px 1px 10px;
-	margin-left: 0;
+	padding-left: 0px; 
+	padding-top: 5px;
+	/*padding: 5px 1px 10px;
+	/*margin-left: 0px;*/
 	font-family: 'Raleway', sans-serif;
 	font-size: 25px;
 	min-width: 100px;
