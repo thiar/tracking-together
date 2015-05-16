@@ -159,7 +159,24 @@ app.post('/register',function(req,res){
         }
         else {
         	res.end("duplicate entry")
-        	console.log(result.length)
+        }
+    }).limit(1);
+})
+app.post('/login',function(req,res){
+	var username=req.body.username
+	var password=req.body.password
+	User.find({username:username,password:password},'username _id',function(err,result){
+        if (err)
+            console.log('error occured in the database');
+        if(result.length=== 0){
+       		res.end("Login gagal")	
+        }
+        else {
+        	var data ={
+        		status:"success",
+        		userData:result
+        	}
+        	res.render('page', {layout: 'layoutnew',page: req.url,data:data})
         }
     }).limit(1);
 })
