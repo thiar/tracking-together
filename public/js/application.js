@@ -247,12 +247,12 @@ $(function() {
 	});
 	$('#map').tap(function(){
 		track=false;
-		$('#track-img').attr("src","./assets/find2.png")
+		$('#track-img').attr("src","./assets/find1.png")
 		userMarker.setIcon(redIcon)
 	})
 	$('#map').touchmove(function(){
 		track=false;
-		$('#track-img').attr("src","./assets/find2.png")
+		$('#track-img').attr("src","./assets/find1.png")
 		userMarker.setIcon(redIcon)
 	})
 	

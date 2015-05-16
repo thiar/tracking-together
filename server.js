@@ -1,7 +1,7 @@
 
 
 var port = 4444;
-
+var mongoose = require('mongoose');
 var express = require('express');
 var app = express();
 var session = require('express-session');
@@ -121,3 +121,45 @@ function clearUser(user,socket)
 http.listen(port, function(){
   console.log('listening on *:'+port);
 });
+/*database connection*/
+mongoose.connect('mongodb://localhost/test');
+/*collection user shcema*/
+var userSchema = mongoose.Schema({
+    username: String,
+    password: String,
+    friends: {}
+})
+/* method add friend*/
+userSchema.statics.addFriend=function(id,friendId){
+	this.model('User').findOneAndUpdate(
+	    {_id: id},
+	    {$push: {friends: friendId}},
+	    {safe: true, upsert: true},
+	    function(err, model) {
+	        console.log(err);
+	    }
+	);
+}
+
+/* user model*/
+var User = mongoose.model('User', userSchema)
+
+
+app.post('/register',function(req,res){
+	var username=req.body.username
+	var password=req.body.password
+	var newUser = new User({ username:username,password:password});
+	User.find({username:username},'username',function(err,result){
+        if (err)
+            console.log('error occured in the database');
+        if(result.length=== 0){
+        	newUser.save(function(err){
+				res.end("registrasi berhasil")
+			})
+        }
+        else {
+        	res.end("duplicate entry")
+        	console.log(result.length)
+        }
+    }).limit(1);
+})
