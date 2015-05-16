@@ -194,7 +194,7 @@ app.post('/login',function(req,res){
 })
 app.get('/page',function(req,res){
 	if(!req.session.login)res.redirect('/login');
-	else res.render('page', {layout: 'layoutnew',page: req.url,data:app.locals.data})
+	else res.render('page', {layout: 'layoutnew',page: req.url,data:req.session.data})
 })
 app.get('/logout',function(req,res){
 	req.session.destroy()
