@@ -66,3 +66,18 @@ h1 {
 .leaflet-control-attribution.leaflet-control {
 	display: none;
 }
+
+.image-icon {
+    height: 52px !important;
+    width: 52px !important;
+    border-radius: 50%;
+    border: solid;
+    border-color: green;
+}
+.image-yellow {
+    height: 52px !important;
+    width: 52px !important;
+    border-radius: 50%;
+    border: solid;
+    border-color: yellow;
+}

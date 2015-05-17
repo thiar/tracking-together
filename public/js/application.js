@@ -10,6 +10,17 @@ $(function() {
 	var doc = $(document);
 
 	// custom marker's icon styles
+	// var tinyIcon = L.Icon.extend({
+	// 	options: {
+	// 		shadowUrl: '../assets/marker-shadow.png',
+	// 		iconSize: [25, 39],
+	// 		iconAnchor:   [12, 36],
+	// 		shadowSize: [41, 41],
+	// 		shadowAnchor: [12, 38],
+	// 		popupAnchor: [0, -30],
+	// 		className:'image-icon'
+	// 	}
+	// });
 	var tinyIcon = L.Icon.extend({
 		options: {
 			shadowUrl: '../assets/marker-shadow.png',
@@ -20,9 +31,11 @@ $(function() {
 			popupAnchor: [0, -30]
 		}
 	});
-	var redIcon = new tinyIcon({ iconUrl: '../assets/marker-red.png' });
-	var yellowIcon = new tinyIcon({ iconUrl: '../assets/marker-yellow.png' });
+	
+	var redIcon = new tinyIcon({ iconUrl: '../assets/pusheen.jpg',className:'image-icon'});
 
+	var yellowIcon = new tinyIcon({ iconUrl: '../assets/pusheen.gif',
+			className:'image-yellow' });
 	var sentData = {};
 
 	var connects = {};
@@ -77,7 +90,7 @@ $(function() {
 	   
 	    requestHelp[msgId]=data.msg
 	    markers[data.id].setIcon(redIcon);
-	    $('#notif ul').append('<li>	<a href="#" id="'+msgId+'" class="requestHelp"> <span class="label label-danger"><i class="fa fa-user"></i></span><span class="message"> ' + data.id + ' Need Your Aid</span><span class="time">'+ Math.floor(distance) +' meters from you</span></a></li>');
+	    $('#notif ul').append('<li>	<a href="#" id="'+msgId+'" > <span class="label label-danger"><i class="fa fa-user"></i></span><span class="message"> ' + data.id + ' Need Your Aid</span><span class="time">'+ Math.floor(distance) +' meters from you</span></a></li>');
 		$('#'+msgId).click(function(e){	
 			e.preventDefault();
 			var id=$(this).attr('id')
