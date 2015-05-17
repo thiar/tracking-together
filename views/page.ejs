@@ -1,8 +1,12 @@
 <div id="map"></div>
 <nav>
-<div class="bottom-nav">
-        	<a id="track"><img style="display:none;" id="track-img2" src="./assets/find2.png" alt="menu" height="42"><img id="track-img" src="./assets/find1.png" alt="menu" height="42"></a>
-        </div>
+	<div class="bottom-nav">
+		<input type="text" id="reqHelp" value="help me, i'm in trouble">
+		<button style="margin-left: auto;margin-right: auto;" id="helpBtn">help</button>
+    	<a id="track" href="#"><img style="display:none;" id="track-img2" src="./assets/find2.png" alt="menu" height="42"><img id="track-img" src="./assets/find1.png" alt="menu" height="42"></a>
+    	
+    </div>
+
 </nav>
 
 <div class="navbar navbar-inverse navbar-fixed-top">
@@ -129,7 +133,7 @@
 									<span class="dropdown-menu-title"> You have 11 notifications</span>
 								</li>
 								<li>
-									<div class="drop-down-wrapper">
+									<div class="drop-down-wrapper" id="notif">
 										<ul>
 											<li>
 												<a href="javascript:void(0)">
@@ -209,9 +213,9 @@
 												</a>
 											</li>
 											<li>
-												<a href="javascript:void(0)">
+												<a href="javascript:void(0)" class="requestHelp">
 													<span class="label label-success"><i class="fa fa-comment"></i></span>
-													<span class="message"> New comment</span>
+													<span class="message"> New comment 2</span>
 													<span class="time"> yesterday</span>
 												</a>
 											</li>
@@ -340,7 +344,7 @@
 								<li>
 									<a href="pages_user_profile.html">
 										<i class="clip-user-2"></i>
-										&nbsp;My Profile
+										&nbsp;<%=data.userData[0].username%>
 									</a>
 								</li>
 								<li>
@@ -367,6 +371,7 @@
 								</li>
 							</ul>
 						</li>
+						<input type="hidden" id="token" value="<%=data.userData[0]._id%>">
 						<!-- end: USER DROPDOWN -->
 
 						<!-- start: PAGE SIDEBAR TOGGLE -->

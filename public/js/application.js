@@ -1,7 +1,7 @@
 $(function() {
 	// generate unique user id
 	var userId = $('#username').text();
-	
+	var token= $('#token').val()
 	var socket = io();
 
 	var map;
@@ -27,8 +27,80 @@ $(function() {
 
 	var connects = {};
 	var markers = {};
+	var requestHelp={};
 	
 	var active = false;
+	$('#helpBtn').click(function(e){
+		console.log($('#reqHelp').val())
+		var msg=$('#reqHelp').val()
+		var lat=userMarker.getLatLng().lat
+	    var lng=userMarker.getLatLng().lng	
+		sentData = {
+			id: userId,
+			socketid:socket.id,
+			token:token,
+			option:"reqhelp",
+			msg:msg,
+			coords: [{
+				lat: lat,
+				lng: lng
+			}]
+		};
+		socket.emit('reqHelp',sentData)
+	})
+	socket.on('connection:reqHelp',function(data){
+		if(data.id==userId)return;
+		var latLng =userMarker.getLatLng()
+		var lat=data.coords[0].lat
+	    var lng=data.coords[0].lng
+	    var reqLatlng=L.latLng(lat,lng)
+	    console.log(latLng.distanceTo(reqLatlng))
+	    var distance=latLng.distanceTo(reqLatlng)
+	    var date=new Date();
+	    var dd=date.getDay();
+	    var mm = date.getMonth()+1; //January is 0!
+		var sc = date.getSeconds();
+		var mn = date.getMinutes();
+		var hr = date.getHours();
+	    var msgId=data.id +'_'+sc+'_'+mn+'_'+hr+'_'+dd+'_'+mm
+	   
+	    requestHelp[msgId]=data.msg
+	    markers[data.id].setIcon(redIcon);
+	    $('#notif ul').append('<li>	<a href="#" id="'+msgId+'" class="requestHelp"> <span class="label label-danger"><i class="fa fa-user"></i></span><span class="message"> ' + data.id + ' Need Your Aid</span><span class="time">'+ Math.floor(distance) +' meters from you</span></a></li>');
+		$('#'+msgId).click(function(e){	
+			e.preventDefault();
+			var id=$(this).attr('id')
+			var thisId=$(this)
+			var msgusr=id.split("_")[0]
+			console.log(msgusr)
+			bootbox.dialog({
+		        message: data.msg,
+		        title: "Help "+data.id,
+		        buttons: {
+		          buttons: {
+		            label: "Don't Help, I'm Bussy Right Now",
+		            className: "btn-danger",
+		            callback: function() {
+		              thisId.parent('li').remove();	
+		            }
+		          },
+		          success: {
+		            label: "Help",
+		            className: "btn-success",
+		            callback: function() {
+		               thisId.parent('li').remove();
+					   delete requestHelp[id]
+					   markers[msgusr].setIcon(yellowIcon)
+		            }
+		          }
+		        }
+		      });
+			
+
+		})
+	})
+	
+
 
 	socket.on('load:coords', function(data) {
 		if (!(data.id in connects) && data.id!=userId) {
@@ -155,6 +227,7 @@ $(function() {
 			sentData = {
 				id: userId,
 				socketid:socket.id,
+				token:token,
 				coords: [{
 					lat: lat,
 					lng: lng,
@@ -212,6 +285,7 @@ $(function() {
 		    sentData = {
 				id: userId,
 				socketid:socket.id,
+				token:token,
 				coords: [{
 					lat: lat,
 					lng: lng,

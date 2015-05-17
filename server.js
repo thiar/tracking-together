@@ -43,10 +43,6 @@ app.get("/test", function(req,res){
 	res.render('page', {layout: 'layoutnew',page: req.url})
 })
 
-//app.get("/test", function(req,res){
-//	res.render('test')
-//})
-
 
 io.sockets.on('connection', function (socket) {
 
@@ -66,20 +62,28 @@ io.sockets.on('connection', function (socket) {
 		console.log(socket.handshake.address)
 	})
 	socket.on('connection:close', function (data) {
-		// for(var i in user)
-		// {
-		// 	if(user[i].socketid==socket.id)
-		// 	{
-		// 		var dataR={}
-		// 		dataR.id=user[i].id
-		// 		delete user[i];
-		// 		io.emit('connection:remove',dataR)
-		// 	}
-		// }
-		var dataR={}
-		dataR.id=user[data.id].id
-		delete user[data.id];
-		io.emit('connection:remove',dataR)
+		if(user[data.id]!=undefined)
+		{
+			var dataR={}
+			dataR.id=user[data.id].id
+			delete user[data.id];
+			io.emit('connection:remove',dataR)	
+		}
+		else
+		{
+			for(var i in user)
+			{	
+				if(user[i].socketid==socket.id)
+				{
+					var dataR={}
+					dataR.id=user[i].id
+					delete user[i];
+					io.emit('connection:remove',dataR)
+					console.log(socket.handshake.address+" disconnect")
+				}
+			}
+		}
+		
 
 	});
 	socket.on('connection:update', function (data) {
@@ -89,8 +93,7 @@ io.sockets.on('connection', function (socket) {
 	});
 	socket.on('disconnect', function (data) {
 		for(var i in user)
-		{
-			
+		{	
 			if(user[i].socketid==socket.id)
 			{
 				var dataR={}
@@ -103,6 +106,10 @@ io.sockets.on('connection', function (socket) {
 		
 	});
 
+	socket.on('reqHelp',function(data){
+		console.log(data)
+		io.emit('connection:reqHelp',data)
+	})
 	setInterval(function() {
 	    clearUser(user,io)
 	    for (var i = 0; i < 1; i++) {
@@ -165,7 +172,8 @@ app.post('/register',function(req,res){
     }).limit(1);
 })
 app.get('/login',function(req,res){
-	res.render('login', {layout: 'layoutnew',page: req.url})
+	if(!req.session.login)res.render('login', {layout: 'layoutnew',page: req.url})
+	else res.redirect('/page');
 })
 app.post('/login',function(req,res){
 	var username=req.body.username
