@@ -172,7 +172,7 @@ app.post('/register',function(req,res){
     }).limit(1);
 })
 app.get('/login',function(req,res){
-	if(!req.session.login)res.render('login', {layout: 'layoutnew',page: req.url})
+	if(!req.session.login)res.render('login', {layout: 'layoutlogin',page: req.url})
 	else res.redirect('/page');
 })
 app.post('/login',function(req,res){
