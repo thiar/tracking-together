@@ -11,7 +11,7 @@ var io = require('socket.io').listen(http);
 var mysql = require('mysql');
 var partial = require('express-partial');
 app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({limit:'10mb'}));
 app.use(partial())
 app.use(expressLayouts)
 app.set('view engine', 'ejs')
