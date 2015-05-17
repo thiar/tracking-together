@@ -47,7 +47,18 @@ $(function() {
 			}]
 		};
 		socket.emit('reqHelp',sentData)
+		$('#helpBtn').hide()
+		$('#reqHelp').hide()
+		$('#showHelpCtrl').children().removeClass('fa-spin')
+
 	})
+	
+	$('#showHelpCtrl').click(function(e){
+		$(this).children().addClass('fa-spin')
+		$('#helpBtn').show()
+		$('#reqHelp').show()		
+	})
+
 	socket.on('connection:reqHelp',function(data){
 		if(data.id==userId)return;
 		var latLng =userMarker.getLatLng()
@@ -351,7 +362,7 @@ $(function() {
     		
     		
 		});
-		L.control.zoom({position:'bottomleft'}).addTo(map)
+		//L.control.zoom({position:'bottomleft'}).addTo(map)
 
 		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 		 	maxZoom: 19,
