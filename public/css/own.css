@@ -45,10 +45,10 @@ h1 {
 
 .bottom-nav{
 	position: fixed;
-	right: 0;
+	left: 0;
 	bottom: 0;
 	padding-bottom: 2%;
-	padding-right: 1%;
+	padding-left: 1%;
 }
 
 .icon-pal{
