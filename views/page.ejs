@@ -1,11 +1,12 @@
 <div id="map"></div>
 <nav>
-	<div class="bottom-nav">
-		<a href="#" id="showHelpCtrl"><i class="fa fa-cog fa-3x "></i></a>
+	<div class="bottom-left-nav">
+		<a id="track" href="#"><img style="display:none;" id="track-img2" src="./assets/find2.png" alt="menu" height="42"><img id="track-img" src="./assets/find1.png" alt="menu" height="42"></a>
+	</div>
+	<div class="bottom-right-nav">
+		<a href="#" id="showHelpCtrl"><img src="./assets/help.png" height="42"></a>
 		<input type="text" style="display:none;" id="reqHelp" value="help me, i'm in trouble">
-		<button style="margin-left: auto;margin-right: auto;display:none;" id="helpBtn">help</button>
-
-    	<a id="track" href="#"><img style="display:none;" id="track-img2" src="./assets/find2.png" alt="menu" height="42"><img id="track-img" src="./assets/find1.png" alt="menu" height="42"></a>
+		<button class="btn btn-success" style="margin-left: auto;margin-right: auto;display:none;" id="helpBtn">Help</button>
     </div>
 
 </nav>
@@ -25,22 +26,22 @@
 						<li class="dropdown">
 							<a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#">
 								<i class="clip-notification-2"></i>
-								<span class="badge"> 11</span>
+								<span class="badge">0</span>
 							</a>
 							<ul class="dropdown-menu notifications">
 								<li>
-									<span class="dropdown-menu-title"> You have 11 notifications</span>
+									<span class="dropdown-menu-title"> You have x notifications</span>
 								</li>
 								<li>
 									<div class="drop-down-wrapper" id="notif">
 										<ul>
-											<li>
+											<!-- <li>
 												<a href="javascript:void(0)">
 													<span class="label label-success"><i class="fa fa-comment"></i></span>
 													<span class="message"> New comment</span>
 													<span class="time"> yesterday</span>
 												</a>
-											</li>
+											</li> -->
 										</ul>
 									</div>
 								</li>
@@ -49,7 +50,7 @@
 						<!-- end: NOTIFICATION DROPDOWN -->
 
 						<!-- start: MESSAGE DROPDOWN -->
-						<li class="dropdown">
+						<!-- <li class="dropdown">
 							<a class="dropdown-toggle" data-close-others="true" data-hover="dropdown" data-toggle="dropdown" href="#">
 								<i class="clip-bubble-3"></i>
 								<span class="badge"> 9</span>
@@ -84,7 +85,7 @@
 									</a>
 								</li>
 							</ul>
-						</li>
+						</li> -->
 						<!-- end: MESSAGE DROPDOWN -->
 						
 						<!-- start: USER DROPDOWN -->
@@ -106,12 +107,6 @@
 										<i class="clip-calendar"></i>
 										&nbsp;My Calendar
 									</a>
-								<li>
-									<a href="pages_messages.html">
-										<i class="clip-bubble-4"></i>
-										&nbsp;My Messages (3)
-									</a>
-								</li>
 								<li class="divider"></li>
 								<li>
 									<a href="utility_lock_screen.html"><i class="clip-locked"></i>
