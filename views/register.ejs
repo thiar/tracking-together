@@ -21,14 +21,22 @@
       <div class="login-container bg-white">
         <div class="p-l-50 m-l-20 p-r-50 m-r-20 p-t-50 m-t-30 sm-p-l-15 sm-p-r-15 sm-p-t-40">
           <img src="assets/logo.png" alt="logo" data-src="assets/logo.png" data-src-retina="assets/logo.png" width="78">
-          <p class="p-t-35">Sign into your pals account</p>
+          <p class="p-t-35">Register your account</p>
           <!-- START Login Form -->
-          <form id="form-login" class="p-t-15" role="form" action="/login" method="POST">
+          <form id="form-login" class="p-t-15" role="form" action="/register" method="POST">
             <!-- START Form Control-->
             <div class="form-group form-group-default">
-              <label>Login</label>
+              <label>Username</label>
               <div class="controls">
-                <input type="text" name="username" placeholder="User Name" class="form-control" required>
+                <input type="text" name="email" placeholder="Username" class="form-control" required>
+              </div>
+            </div>
+            <!-- END Form Control-->
+            <!-- START Form Control-->
+            <div class="form-group form-group-default">
+              <label>Email</label>
+              <div class="controls">
+                <input type="email" name="email" placeholder="Email" class="form-control" required>
               </div>
             </div>
             <!-- END Form Control-->
@@ -36,22 +44,11 @@
             <div class="form-group form-group-default">
               <label>Password</label>
               <div class="controls">
-                <input type="password" class="form-control" name="password" placeholder="Credentials" required>
-              </div>
-            </div>
-            <!-- START Form Control-->
-            <div class="row">
-              <div class="col-md-6 no-padding">
-                <div class="checkbox ">
-                  <input type="checkbox" value="1" id="checkbox1">
-                  <label for="checkbox1">Keep Signed in</label>
-                </div>
+                <input type="password" class="form-control" name="password" placeholder="Pass" required>
               </div>
             </div>
             <!-- END Form Control-->
-            <button class="btn btn-complete btn-cons m-t-10" type="submit">Sign in</button>
-            </br><br>New to pals? Sign up</br>
-            <a href="/register"><button class="btn btn-warning btn-cons m-t-10">Sign up</button></a>
+            <button class="btn btn-complete btn-cons m-t-10" type="submit">Sign up</button>
           </form>
 
           <!--END Login Form-->
