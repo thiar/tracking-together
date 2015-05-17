@@ -111,3 +111,10 @@ h1 {
     border: solid;
     border-color: yellow;
 }
+.image-otherHelp {
+    height: 52px !important;
+    width: 52px !important;
+    border-radius: 50%;
+    border: solid;
+    border-color: red;
+}

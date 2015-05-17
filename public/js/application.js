@@ -53,6 +53,7 @@ $(function() {
 			token:token,
 			option:"reqhelp",
 			msg:msg,
+			avatar:$('#avatar').val(),
 			coords: [{
 				lat: lat,
 				lng: lng
@@ -97,7 +98,8 @@ $(function() {
 	    var msgId=uid +'-'+sc+'_'+mn+'_'+hr+'_'+dd+'_'+mm
 	    console.log(msgId)
 	    requestHelp[msgId]=data.msg
-	    markers[uid].setIcon(redIcon);
+	    var otherHelp = new tinyIcon({ iconUrl: data.avatar,className:'image-otherHelp'});
+	    markers[uid].setIcon(otherHelp);
 	    $('#notif ul').append('<li>	<a href="#" id="'+msgId+'" > <span class="label label-danger"><i class="fa fa-user"></i></span><span class="message"> ' + data.id + ' Need Your Aid</span><span class="time">'+ Math.floor(distance) +' meters from you</span></a></li>');
 		$('#'+msgId).click(function(e){	
 			e.preventDefault();
@@ -122,7 +124,8 @@ $(function() {
 		            callback: function() {
 		               thisId.parent('li').remove();
 					   delete requestHelp[id]
-					   markers[msgusr].setIcon(yellowIcon)
+					   var other = new tinyIcon({ iconUrl: data.avatar,className:'image-other'});
+					   markers[msgusr].setIcon(other)
 		            }
 		          }
 		        }
