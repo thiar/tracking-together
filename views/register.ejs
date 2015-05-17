@@ -28,7 +28,7 @@
             <div class="form-group form-group-default">
               <label>Username</label>
               <div class="controls">
-                <input type="text" name="email" placeholder="Username" class="form-control" required>
+                <input type="text" name="username" placeholder="Username" class="form-control" required>
               </div>
             </div>
             <!-- END Form Control-->
@@ -46,6 +46,15 @@
               <div class="controls">
                 <input type="password" class="form-control" name="password" placeholder="Pass" required>
               </div>
+            </div>
+            <div class="form-group form-group-default">
+              <label>Upload Picture</label>
+              <div class="controls">
+                <input id="avatar" type="file" class="form-control" name="avatar" required>
+                <input id="imgData" type="hidden" class="form-control" name="img" required>
+              </div>
+              <img id="img" src="" style="width:64px;"/>
+              
             </div>
             <!-- END Form Control-->
             <button class="btn btn-complete btn-cons m-t-10" type="submit">Sign up</button>
@@ -68,4 +77,3 @@
         </div>
       </div>
     </div>
-    

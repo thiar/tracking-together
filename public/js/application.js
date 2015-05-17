@@ -32,7 +32,7 @@ $(function() {
 		}
 	});
 	
-	var redIcon = new tinyIcon({ iconUrl: '../assets/pusheen.jpg',className:'image-green'});
+	var redIcon = new tinyIcon({ iconUrl: $('#avatar').val(),className:'image-user'});
 
 	var yellowIcon = new tinyIcon({ iconUrl: '../assets/pusheen.gif',className:'image-yellow' });
 	var sentData = {};
@@ -263,6 +263,7 @@ $(function() {
 				id: userId,
 				socketid:socket.id,
 				token:token,
+				avatar:$('#avatar').val(),
 				coords: [{
 					lat: lat,
 					lng: lng,
@@ -321,6 +322,7 @@ $(function() {
 				id: userId,
 				socketid:socket.id,
 				token:token,
+				avatar:$('#avatar').val(),
 				coords: [{
 					lat: lat,
 					lng: lng,
@@ -346,14 +348,16 @@ $(function() {
 			//$('#track-img').attr("src","./assets/find1.png")
 			$('#track-img').show()
 			$('#track-img2').hide()
-			userMarker.setIcon(redIcon)
+			var userIcon = new tinyIcon({ iconUrl: $('#avatar').val(),className:'image-user'});
+			userMarker.setIcon(userIcon)
 		}
 		else{
 			map.setView(currPosition,18);
 			track=true;
 			$('#track-img2').show()
 			$('#track-img').hide()
-			userMarker.setIcon(yellowIcon)
+			var trackIcon = new tinyIcon({ iconUrl: $('#avatar').val(),className:'image-userTrack'});
+			userMarker.setIcon(trackIcon)
 		} 
 		console.log(track)
 	});
@@ -361,13 +365,15 @@ $(function() {
 		track=false;
 		$('#track-img').show()
 		$('#track-img2').hide()
-		userMarker.setIcon(redIcon)
+		var userIcon = new tinyIcon({ iconUrl: $('#avatar').val(),className:'image-user'});
+		userMarker.setIcon(userIcon)
 	})
 	$('#map').touchmove(function(){
 		track=false;
 		$('#track-img').show()
 		$('#track-img2').hide()
-		userMarker.setIcon(redIcon)
+		var userIcon = new tinyIcon({ iconUrl: $('#avatar').val(),className:'image-user'});
+		userMarker.setIcon(userIcon)
 	})
 	
 	// check whether browser supports geolocation api
@@ -404,11 +410,13 @@ $(function() {
 	// showing markers for connections
 	function setMarker(data) {
 		for (var i = 0; i < data.coords.length; i++) {
-			var marker = L.marker([data.coords[i].lat, data.coords[i].lng], { icon: yellowIcon }).addTo(map);
+			var otherIcon = new tinyIcon({ iconUrl: data.avatar,className:'image-other'});
+			var marker = L.marker([data.coords[i].lat, data.coords[i].lng], { icon: otherIcon }).addTo(map);
 			
 			marker.bindPopup('<p>One more external user is '+ data.id+'</p>');
 			var uid = data.id.replace(/ /g,'_');
 			markers[uid] = marker;
+
 		}
 	}
 

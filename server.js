@@ -1,5 +1,4 @@
-
-
+var fs =require('fs')
 var port = 4444;
 var mongoose = require('mongoose');
 var express = require('express');
@@ -136,6 +135,7 @@ mongoose.connect('mongodb://localhost/test');
 var userSchema = mongoose.Schema({
     username: String,
     password: String,
+    avatar :String,
     friends: {}
 })
 /* method add friend*/
@@ -153,17 +153,23 @@ userSchema.statics.addFriend=function(id,friendId){
 /* user model*/
 var User = mongoose.model('User', userSchema)
 
-
+app.get('/register',function(req,res){
+	res.render('register', {layout: 'layoutlogin',page: req.url})
+})
 app.post('/register',function(req,res){
 	var username=req.body.username
 	var password=req.body.password
-	var newUser = new User({ username:username,password:password});
+	var img =req.body.img
+	var imgPath='assets/avatar/'+username+'.png';
+	var newUser = new User({ username:username,password:password,avatar:imgPath});
 	User.find({username:username},'username',function(err,result){
         if (err)
             console.log('error occured in the database');
         if(result.length=== 0){
         	newUser.save(function(err){
-				res.end("registrasi berhasil")
+				var imageBuffer = decodeBase64Image(img);
+				fs.writeFile('public/'+imgPath, imageBuffer.data, function(err) { });
+				res.end("registrasi berhasil");
 			})
         }
         else {
@@ -178,7 +184,7 @@ app.get('/login',function(req,res){
 app.post('/login',function(req,res){
 	var username=req.body.username
 	var password=req.body.password
-	User.find({username:username,password:password},'username _id',function(err,result){
+	User.find({username:username,password:password},'username _id avatar',function(err,result){
         if (err)
             console.log('error occured in the database');
         if(result.length=== 0){
@@ -208,3 +214,16 @@ app.get('/logout',function(req,res){
 	req.session.destroy()
 	res.redirect('/login');
 })
+function decodeBase64Image(dataString) {
+  var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
+    response = {};
+
+  if (matches.length !== 3) {
+    return new Error('Invalid input string');
+  }
+
+  response.type = matches[1];
+  response.data = new Buffer(matches[2], 'base64');
+
+  return response;
+}

@@ -75,6 +75,7 @@ h1 {
 	display: none;
 }
 
+
 .image-green {
     height: 52px !important;
     width: 52px !important;
@@ -83,6 +84,27 @@ h1 {
     border-color: green;
 }
 .image-yellow {
+    height: 52px !important;
+    width: 52px !important;
+    border-radius: 50%;
+    border: solid;
+    border-color: yellow;
+}
+.image-user {
+    height: 52px !important;
+    width: 52px !important;
+    border-radius: 50%;
+    border: solid;
+    border-color: #666633;
+}
+.image-userTrack {
+    height: 52px !important;
+    width: 52px !important;
+    border-radius: 50%;
+    border: solid;
+    border-color: #A9A98C;
+}
+.image-other {
     height: 52px !important;
     width: 52px !important;
     border-radius: 50%;
