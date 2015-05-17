@@ -66,9 +66,17 @@ $(function() {
 	})
 	
 	$('#showHelpCtrl').click(function(e){
-		$(this).children().addClass('fa-spin')
-		$('#helpBtn').show()
-		$('#reqHelp').show()		
+		if ( $('#helpBtn').css('display') == 'none' ){
+			$(this).children().addClass('fa-spin')
+			$('#helpBtn').show()
+			$('#reqHelp').show()    
+		}
+		else
+		{
+			$('#helpBtn').hide()
+			$('#reqHelp').hide()
+			$('#showHelpCtrl').children().removeClass('fa-spin')
+		}
 	})
 
 	socket.on('connection:reqHelp',function(data){
@@ -85,16 +93,17 @@ $(function() {
 		var sc = date.getSeconds();
 		var mn = date.getMinutes();
 		var hr = date.getHours();
-	    var msgId=data.id +'_'+sc+'_'+mn+'_'+hr+'_'+dd+'_'+mm
-	   
+		var uid = data.id.replace(/ /g,'_');
+	    var msgId=uid +'-'+sc+'_'+mn+'_'+hr+'_'+dd+'_'+mm
+	    console.log(msgId)
 	    requestHelp[msgId]=data.msg
-	    markers[data.id].setIcon(redIcon);
+	    markers[uid].setIcon(redIcon);
 	    $('#notif ul').append('<li>	<a href="#" id="'+msgId+'" > <span class="label label-danger"><i class="fa fa-user"></i></span><span class="message"> ' + data.id + ' Need Your Aid</span><span class="time">'+ Math.floor(distance) +' meters from you</span></a></li>');
 		$('#'+msgId).click(function(e){	
 			e.preventDefault();
 			var id=$(this).attr('id')
 			var thisId=$(this)
-			var msgusr=id.split("_")[0]
+			var msgusr=id.split("-")[0]
 			console.log(msgusr)
 			bootbox.dialog({
 		        message: data.msg,
@@ -151,9 +160,10 @@ $(function() {
 		console.log("remove " + data)
 		if ((data.id in connects) && data.id!=userId) {
 			//console.log("remove")
-			map.removeLayer(markers[data.id]);
+			var uid = data.id.replace(/ /g,'_');
+			map.removeLayer(markers[uid]);
 			delete connects[data.id];
-			delete markers[data.id]
+			delete markers[uid]
 		}
 		
 	});
@@ -163,9 +173,10 @@ $(function() {
 		{
 			if ((data.id in connects) && data.id!=userId) {
 				console.log("clear "+ data.id)
-				map.removeLayer(markers[data.id]);
-				delete connects[data.id];
-				delete markers[data.id];
+				var uid = data.id.replace(/ /g,'_');
+				map.removeLayer(markers[uid]);
+				delete connects[uid];
+				delete markers[uid];
 			}
 		}
 		
@@ -173,11 +184,12 @@ $(function() {
 	socket.on('connection:updatelocation', function(data) {
 		if ((data.id in connects) && data.id!=userId) {
 			//console.log(data.coords[0])
+			var uid = data.id.replace(/ /g,'_');
 			var updateLoc=false
 			var lat=data.coords[0].lat
 			var lng=data.coords[0].lng
-	    	var currlat=markers[data.id].getLatLng().lat
-		    var currlng=markers[data.id].getLatLng().lng
+	    	var currlat=markers[uid].getLatLng().lat
+		    var currlng=markers[uid].getLatLng().lng
 		    var currlatlng = L.latLng(currlat,currlng);
 	    	
 	    	var latlng = L.latLng(lat, lng);
@@ -200,7 +212,7 @@ $(function() {
 				  currlng+=sellng;
 
 				  userMarker.setLatLng([currlat,currlng])
-				  markers[data.id].setLatLng([currlat,currlng])
+				  markers[uid].setLatLng([currlat,currlng])
 				  if (counter >= distance) {
 				    window.clearInterval(intervalUpdate);
 				    updateLoc=true   
@@ -395,8 +407,8 @@ $(function() {
 			var marker = L.marker([data.coords[i].lat, data.coords[i].lng], { icon: yellowIcon }).addTo(map);
 			
 			marker.bindPopup('<p>One more external user is '+ data.id+'</p>');
-			
-			markers[data.id] = marker;
+			var uid = data.id.replace(/ /g,'_');
+			markers[uid] = marker;
 		}
 	}
 

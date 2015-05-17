@@ -185,7 +185,7 @@ app.post('/login',function(req,res){
        		var data ={
         		status:"AUTH_FAILED"
         	}
-       		res.render('login', {layout: 'layoutnew',page: req.url,data:data})
+       		res.render('login', {layout: 'layoutlogin',page: req.url,data:data})
         }
         else {
 
