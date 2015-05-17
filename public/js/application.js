@@ -32,10 +32,9 @@ $(function() {
 		}
 	});
 	
-	var redIcon = new tinyIcon({ iconUrl: '../assets/pusheen.jpg',className:'image-icon'});
+	var redIcon = new tinyIcon({ iconUrl: '../assets/pusheen.jpg',className:'image-green'});
 
-	var yellowIcon = new tinyIcon({ iconUrl: '../assets/pusheen.gif',
-			className:'image-yellow' });
+	var yellowIcon = new tinyIcon({ iconUrl: '../assets/pusheen.gif',className:'image-yellow' });
 	var sentData = {};
 
 	var connects = {};
