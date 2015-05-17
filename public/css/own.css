@@ -39,16 +39,24 @@ h1 {
 	position: fixed;
 	right: 0;
 	top: 0;
-	padding-top: 1%;
 	padding-right: 1%;
+	padding-top: 1%;
 }
 
-.bottom-nav{
+.bottom-left-nav{
 	position: fixed;
 	left: 0;
 	bottom: 0;
-	padding-bottom: 2%;
 	padding-left: 1%;
+	padding-bottom: 2%;
+}
+
+.bottom-right-nav{
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	padding-right: 1%;
+	padding-bottom: 2%;
 }
 
 .icon-pal{
