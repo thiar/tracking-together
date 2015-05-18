@@ -109,6 +109,10 @@ io.sockets.on('connection', function (socket) {
 		console.log(data)
 		io.emit('connection:reqHelp',data)
 	})
+	socket.on('giveHelp',function(data){
+		console.log(data)
+		io.emit('connection:giveHelp',data)
+	})
 	setInterval(function() {
 	    clearUser(user,io)
 	    for (var i = 0; i < 1; i++) {
@@ -160,7 +164,7 @@ app.post('/register',function(req,res){
 	var username=req.body.username
 	var password=req.body.password
 	var img =req.body.img
-	var imgPath='assets/avatar/'+username+'.png';
+	var imgPath='assets/avatar/'+username+'.jpg';
 	var newUser = new User({ username:username,password:password,avatar:imgPath});
 	User.find({username:username},'username',function(err,result){
         if (err)

@@ -32,9 +32,7 @@ $(function() {
 		}
 	});
 	
-	var redIcon = new tinyIcon({ iconUrl: $('#avatar').val(),className:'image-user'});
 
-	var yellowIcon = new tinyIcon({ iconUrl: '../assets/pusheen.gif',className:'image-yellow' });
 	var sentData = {};
 
 	var connects = {};
@@ -86,8 +84,9 @@ $(function() {
 		var lat=data.coords[0].lat
 	    var lng=data.coords[0].lng
 	    var reqLatlng=L.latLng(lat,lng)
-	    console.log(latLng.distanceTo(reqLatlng))
+	    
 	    var distance=latLng.distanceTo(reqLatlng)
+	    if(distance>1000)return;
 	    var date=new Date();
 	    var dd=date.getDay();
 	    var mm = date.getMonth()+1; //January is 0!
@@ -106,7 +105,8 @@ $(function() {
 			var id=$(this).attr('id')
 			var thisId=$(this)
 			var msgusr=id.split("-")[0]
-			console.log(msgusr)
+			var usrID = msgusr.replace(/_/g,' ');
+			
 			bootbox.dialog({
 		        message: data.msg,
 		        title: "Help "+data.id,
@@ -118,6 +118,67 @@ $(function() {
 		              thisId.parent('li').remove();	
 		            }
 		          },
+		          success: {
+		            label: "Help",
+		            className: "btn-success",
+		            callback: function() {
+		            	sentData = {
+							id: userId,
+							socketid:socket.id,
+							token:token,
+							to:usrID,
+							option:"givehelp",
+							msg:"Ok don't worry buddy, I'l Help You",
+							avatar:$('#avatar').val(),
+							coords: [{
+								lat: lat,
+								lng: lng
+							}]
+						};
+					   socket.emit('giveHelp',sentData);
+		               thisId.parent('li').remove();
+					   delete requestHelp[id]
+					   var other = new tinyIcon({ iconUrl: data.avatar,className:'image-other'});
+					   markers[msgusr].setIcon(other)
+		            }
+		          }
+		        }
+		      });
+			
+
+		})
+	})
+	socket.on('connection:giveHelp',function(data){
+		if(data.to!=userId)return;
+		var latLng =userMarker.getLatLng()
+		var lat=data.coords[0].lat
+	    var lng=data.coords[0].lng
+	    var reqLatlng=L.latLng(lat,lng)
+	    
+	    var distance=latLng.distanceTo(reqLatlng)
+	    var date=new Date();
+	    var dd=date.getDay();
+	    var mm = date.getMonth()+1; //January is 0!
+		var sc = date.getSeconds();
+		var mn = date.getMinutes();
+		var hr = date.getHours();
+		var uid = data.id.replace(/ /g,'_');
+	    var msgId=uid +'-'+sc+'_'+mn+'_'+hr+'_'+dd+'_'+mm
+	    
+	    var someoneAid = new tinyIcon({ iconUrl: data.avatar,className:'image-someoneAid'});
+	    markers[uid].setIcon(someoneAid);
+	    $('#notif ul').append('<li>	<a href="#" id="'+msgId+'" > <span class="label label-success"><i class="fa fa-user"></i></span><span class="message"> ' + data.id + ' Will Help You</span><span class="time">'+ Math.floor(distance) +' meters from you</span></a></li>');
+		$('#'+msgId).click(function(e){	
+			e.preventDefault();
+			var id=$(this).attr('id')
+			var thisId=$(this)
+			var msgusr=id.split("-")[0]
+			var usrID = msgusr.replace(/_/g,' ');
+			
+			bootbox.dialog({
+		        message: data.msg,
+		        title: data.id+" Will Help You",
+		        buttons: {
 		          success: {
 		            label: "Help",
 		            className: "btn-success",
@@ -134,6 +195,7 @@ $(function() {
 
 		})
 	})
+
 	
 
 
@@ -255,9 +317,10 @@ $(function() {
 		currPosition=e.latlng;
 		if(!watch)
 		{
+			var userIcon = new tinyIcon({ iconUrl: $('#avatar').val(),className:'image-user'});
 
 			userMarker = new L.marker([lat, lng], {
-				icon: redIcon
+				icon: userIcon
 			});
 			userMarker.addTo(map);
 			userMarker.bindPopup('<p>You are there! Your ID is ' + userId + '</p>').openPopup();
